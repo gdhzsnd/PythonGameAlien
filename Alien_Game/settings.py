@@ -8,6 +8,9 @@ class Settings:
         self.screen_height = 800
         self.bg_color = (230, 230, 230)
 
+        # 星星设置
+        self.star_number = 150
+
         # 飞船设置
         self.ship_limit = 3
 
@@ -37,7 +40,7 @@ class Settings:
         self.fleet_direction = 1
 
         # 记分
-        self.alien_point = 50
+        self.alien_points = 50
 
     def increase_speed(self):
         """提高速度设置和外星人的分数"""

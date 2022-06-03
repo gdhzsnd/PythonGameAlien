@@ -1,4 +1,5 @@
 import sys
+from random import randint
 from time import sleep
 
 import pygame
@@ -10,6 +11,7 @@ from button import Button
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
+from star import Star
 
 
 class AlienInvasion:
@@ -34,6 +36,9 @@ class AlienInvasion:
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
 
+        self.stars = pygame.sprite.Group()
+        self.create_stars()
+
         self._create_fleet()
 
         # 制作play按钮
@@ -50,6 +55,8 @@ class AlienInvasion:
                 self._update_aliens()
 
             self._update_screen()
+
+
 
     def _check_events(self):
         """响应按键和鼠标事件."""
@@ -212,6 +219,18 @@ class AlienInvasion:
             for alien_number in range(number_aliens_x):
                 self._create_alien(alien_number, row_number)
 
+    def create_stars(self):
+        """创建星星"""
+        for row_number in range(self.settings.star_number):
+            self._create_star()
+
+    def _create_star(self):
+        star = Star(self)
+        star.x =   randint(0, self.settings.screen_width)
+        star.rect.x = star.x
+        star.rect.y = randint(0, self.settings.screen_height - 1.5 * self.ship.rect.height)
+        self.stars.add(star)
+
     def _create_alien(self, alien_number, row_number):
         """创建一个外星人,并将其放在当行"""
         alien = Alien(self)
@@ -238,7 +257,13 @@ class AlienInvasion:
 
         """更新屏幕上的图像，并切换到新屏幕."""
         self.screen.fill(self.settings.bg_color)
+
+        # 绘制星星在屏幕上
+        self.stars.draw(self.screen)
+
+        # 将飞船绘制到屏幕上
         self.ship.blitme()
+
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         self.aliens.draw(self.screen)
